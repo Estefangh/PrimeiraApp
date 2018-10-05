@@ -44,6 +44,7 @@ public class ClientesAdapter extends ArrayAdapter<Cliente> {
         tvCodigo.setText(cliente.getCodigoDeBarras().toString());
         ImageView fotoCliente = convertView.findViewById(R.id.imvFotoClienteAdapter);
 
+        //teste se o cliente tem uma foto
         if(cliente.getUrl_foto() != null) {
             fotoCliente.setImageURI(Uri.parse(cliente.getUrl_foto()));
         }

@@ -9,14 +9,16 @@ public class Produto implements Serializable {
     private String descricao;
     private boolean situacao;
     private Integer quantidade;
+    private String url_foto;
 
-    public Produto(Long id, String nome, Double valor, String descricao, boolean situacao, int quantidade) {
+    public Produto(Long id, String nome, Double valor, String descricao, boolean situacao, int quantidade, String url_foto) {
         this.id = id;
         this.nome = nome;
         this.valor = valor;
         this.descricao = descricao;
         this.situacao = situacao;
         this.quantidade = quantidade;
+        this.url_foto = url_foto;
     }
 
     public Produto() {
@@ -71,11 +73,24 @@ public class Produto implements Serializable {
         this.quantidade = quantidade;
     }
 
-    @Override
-    public String toString() {
-        return "Produto [id=" + id + ", nome=" + nome + ", valor=" + valor + ", descricao=" + descricao + ", situacao=" + situacao
-                + "]" + "\n";
+    public String getUrl_foto() {
+        return url_foto;
     }
 
+    public void setUrl_foto(String url_foto) {
+        this.url_foto = url_foto;
+    }
 
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", valor=" + valor +
+                ", descricao='" + descricao + '\'' +
+                ", situacao=" + situacao +
+                ", quantidade=" + quantidade +
+                ", url_foto='" + url_foto + '\'' +
+                '}';
+    }
 }

@@ -17,6 +17,7 @@ import br.edu.ifsul.primeiraapp.R;
 import br.edu.ifsul.primeiraapp.activity.CestaActivity;
 import br.edu.ifsul.primeiraapp.model.Cliente;
 import br.edu.ifsul.primeiraapp.model.Item_pedido;
+import br.edu.ifsul.primeiraapp.model.Produto;
 
 public class CestaAdapter extends ArrayAdapter<Item_pedido> {
     private static final String TAG = "cestaAdapter";
@@ -44,12 +45,19 @@ public class CestaAdapter extends ArrayAdapter<Item_pedido> {
         ImageView ivProdutoCesta = convertView.findViewById(R.id.ivProdutoCesta);
         TextView tvNomeProdutoCesta = convertView.findViewById(R.id.tvNomeProdutoCesta);
         tvNomeProdutoCesta.setText(itens.getProduto().getNome());
+        TextView tvQuantidadeProdutoCesta = convertView.findViewById(R.id.tvQuantidadeProdutoCesta);
+        tvQuantidadeProdutoCesta.setText(itens.getProduto().getQuantidade());
+        TextView tvValorTotalProduto = convertView.findViewById(R.id.tvValorTotalProduto);
+        tvValorTotalProduto.setText(itens.getProduto().getValor().toString());
 
 
-
-        //fazer os campos usados no layout
-        //fazer o else
-
-        return super.getView(position, convertView, parent);
+        if (itens.getProduto().getUrl_foto() != null){
+           //fazer esse if
+        }
+        else{
+            ivProdutoCesta.setImageResource(R.drawable.carrinho_de_compras);
+        }
+        //fazer o teste se o produto tem imagem
+        return convertView;
     }
 }
