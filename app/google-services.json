@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "58048463039",
+    "firebase_url": "https://primeiraapp-6236f.firebaseio.com",
+    "project_id": "primeiraapp-6236f",
+    "storage_bucket": "primeiraapp-6236f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:58048463039:android:f002e540e5fb895f",
+        "android_client_info": {
+          "package_name": "br.edu.ifsul.primeiraapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "58048463039-tnmav34v09tgecqqsmcrbjsq5ske1g6b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.edu.ifsul.primeiraapp",
+            "certificate_hash": "2eaacb1a663595536d11a7f81d33d9d8aa8a941b"
+          }
+        },
+        {
+          "client_id": "58048463039-230r02pbtghvot7deqfj2u1br0ctrkqc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjuhY9hl_opMQOeYXUcz_r91Sm_5G-iHM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "58048463039-230r02pbtghvot7deqfj2u1br0ctrkqc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
