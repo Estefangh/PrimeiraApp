@@ -1,15 +1,21 @@
 package br.edu.ifsul.primeiraapp.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,12 +28,15 @@ import java.util.List;
 
 import br.edu.ifsul.primeiraapp.R;
 import br.edu.ifsul.primeiraapp.adapter.ProdutosAdapter;
+import br.edu.ifsul.primeiraapp.barcode.BarcodeCaptureActivity;
 import br.edu.ifsul.primeiraapp.model.Cliente;
 import br.edu.ifsul.primeiraapp.model.Produto;
 import br.edu.ifsul.primeiraapp.setup.AppSetup;
 
 public class ProdutosActivity extends AppCompatActivity {
 
+    private static final int RC_BARCODE_CAPTURE = 0;
+    private static final String TAG = "produtosActivity";
     private List<Produto> produtos;
     public ListView lvProdutos;
     private static DatabaseReference myRef;
@@ -65,18 +74,21 @@ public class ProdutosActivity extends AppCompatActivity {
 
             public static final String TAG ="ProdutosActivity" ;
 
+
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                GenericTypeIndicator<List<Produto>> type =
-                        new GenericTypeIndicator<List<Produto>>();
+                GenericTypeIndicator<List<Produto>> type = new GenericTypeIndicator<List<Produto>>(){};
 
                 produtos = dataSnapshot.getValue(type);
                 produtos.remove(null);
                 Log.d(TAG, "Nome do produto: " + produtos);
                 atualizarView();
             }
+
+
 
             @Override
             public void onCancelled(DatabaseError error) {
@@ -85,6 +97,38 @@ public class ProdutosActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!AppSetup.cesta.isEmpty()){
+            alertDialogSimNao("Atenção","Se você sair os dados serão perdidos. Deseja sair mesmo assim?");
+        }
+        else{
+            finish();
+        }
+    }
+
+    private void alertDialogSimNao(String titulo, String mensagem){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //add the title and text
+        builder.setTitle(titulo);
+        builder.setMessage(mensagem);
+        //add the buttons
+        builder.setPositiveButton(R.string.sim, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.nao, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ProdutosActivity.this, "Operação cancelada.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.show();
     }
 
     private void atualizarView() {
@@ -120,5 +164,54 @@ public class ProdutosActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menuitem_barcode: {
+                Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+                intent.putExtra(BarcodeCaptureActivity.AutoFocus, true); //liga o autofocus
+                intent.putExtra(BarcodeCaptureActivity.UseFlash, false); //liga a lanterna
+                startActivityForResult(intent, RC_BARCODE_CAPTURE);
+                break;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_BARCODE_CAPTURE) {
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                if (data != null) {
+                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                    //Toast.makeText(this, barcode.displayValue, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
+                    //localiza o produto na lista (ou não)
+                    boolean flag = true;
+                    for (Produto produto : produtos){
+                        if(String.valueOf(produto.getCodigoDeBarras()).equals(barcode.displayValue)){
+                            flag = false;
+                            Intent intent = new Intent(ProdutosActivity.this, DetalheProdutoActivity.class);
+                            intent.putExtra("produto", produto);
+                            startActivity(intent);
+                            break;
+                        }
+                    }
+                    if(flag){
+                        Toast.makeText(this, "Produto não cadastrado.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, R.string.barcode_failure, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "No barcode captured, intent data is null");
+                }
+            } else {
+                Toast.makeText(this, String.format(getString(R.string.barcode_error),
+                        CommonStatusCodes.getStatusCodeString(resultCode)), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

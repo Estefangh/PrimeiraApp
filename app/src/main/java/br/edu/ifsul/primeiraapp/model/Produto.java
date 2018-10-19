@@ -3,7 +3,7 @@ package br.edu.ifsul.primeiraapp.model;
 import java.io.Serializable;
 
 public class Produto implements Serializable {
-    private Long id;
+    private Long codigoDeBarras;
     private String nome;
     private Double valor;
     private String descricao;
@@ -11,26 +11,16 @@ public class Produto implements Serializable {
     private Integer quantidade;
     private String url_foto;
 
-    public Produto(Long id, String nome, Double valor, String descricao, boolean situacao, int quantidade, String url_foto) {
-        this.id = id;
-        this.nome = nome;
-        this.valor = valor;
-        this.descricao = descricao;
-        this.situacao = situacao;
-        this.quantidade = quantidade;
-        this.url_foto = url_foto;
-    }
-
     public Produto() {
 
     }
 
-    public Long getId() {
-        return id;
+    public Long getCodigoDeBarras() {
+        return codigoDeBarras;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCodigoDeBarras(Long codigoDeBarras) {
+        this.codigoDeBarras = codigoDeBarras;
     }
 
     public String getNome() {
@@ -84,7 +74,7 @@ public class Produto implements Serializable {
     @Override
     public String toString() {
         return "Produto{" +
-                "id=" + id +
+                "codigoDeBarras=" + codigoDeBarras +
                 ", nome='" + nome + '\'' +
                 ", valor=" + valor +
                 ", descricao='" + descricao + '\'' +

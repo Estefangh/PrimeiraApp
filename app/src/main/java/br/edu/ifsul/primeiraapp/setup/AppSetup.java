@@ -13,14 +13,18 @@ import br.edu.ifsul.primeiraapp.model.Item_pedido;
 public class AppSetup {
     public static Cliente cliente=null;
 
+
+    public static FirebaseUser vendedor = null;
     public static FirebaseUser user = null;
     private static DatabaseReference myRef = null;
     public static List<Item_pedido> itensPedido=new ArrayList<>();
 
+    public static List<Item_pedido> cesta = new ArrayList<>();
+
     public static DatabaseReference getInstance(){
         if (myRef == null){
              FirebaseDatabase database = FirebaseDatabase.getInstance();
-             DatabaseReference myRef = database.getReference("Vendas");
+             DatabaseReference myRef = database.getReference("vendas");
 
              return myRef;
         }

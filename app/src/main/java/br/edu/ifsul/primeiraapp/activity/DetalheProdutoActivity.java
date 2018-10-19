@@ -1,5 +1,6 @@
 package br.edu.ifsul.primeiraapp.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import br.edu.ifsul.primeiraapp.R;
+import br.edu.ifsul.primeiraapp.model.Item_pedido;
 import br.edu.ifsul.primeiraapp.model.Produto;
 import br.edu.ifsul.primeiraapp.setup.AppSetup;
 
@@ -18,6 +20,7 @@ public class DetalheProdutoActivity extends AppCompatActivity {
 
     private static final String TAG = "detalheProdutoActivity";
     private Produto produto;
+    private EditText etQuantidade;
 
 
     @Override
@@ -30,7 +33,7 @@ public class DetalheProdutoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhe_produto);
 
-
+         etQuantidade = findViewById(R.id.etQuantidade);
 
 
         produto = new Produto();
@@ -53,13 +56,30 @@ public class DetalheProdutoActivity extends AppCompatActivity {
         btComprar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText etQuantidade = findViewById(R.id.etQuantidade);
-                if(!etQuantidade.getText().toString().isEmpty()) {
-                    produto.setQuantidade(Integer.valueOf(etQuantidade.getText().toString()));
-                    Toast.makeText(DetalheProdutoActivity.this, "Parabéns, você comprou:" + produto.getQuantidade().toString(), Toast.LENGTH_SHORT).show();
+                if(AppSetup.cliente == null){
+                    Toast.makeText(DetalheProdutoActivity.this, "Selecione um cliente para venda.", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(DetalheProdutoActivity.this, ClienteActivity.class));
                 }else{
-                    Toast.makeText(DetalheProdutoActivity.this, "Digite a quantidade a ser comprada", Toast.LENGTH_SHORT).show();         }
+                    if(!etQuantidade.getText().toString().isEmpty()){
+                        if(Integer.parseInt(etQuantidade.getText().toString()) <= produto.getQuantidade().intValue()){
+                            //cria o item vendido e o adicona no carrinho
+                            Item_pedido item_pedido = new Item_pedido();
+                            item_pedido.setQuantidadePedido(Integer.valueOf(etQuantidade.getText().toString()));
+                            item_pedido.setProduto(produto);
+                            item_pedido.getProduto().setSituacao(false);
+                            item_pedido.setTotalItem(produto.getValor()*item_pedido.getQuantidadePedido());
+                            AppSetup.cesta.add(item_pedido);
+                            Toast.makeText(DetalheProdutoActivity.this,"Item adicionado ao carrinho.", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(DetalheProdutoActivity.this, CestaActivity.class));
+                            finish();
+                        }else{
+                            Toast.makeText(DetalheProdutoActivity.this, "Ultrapassa a quantidade em estoque.", Toast.LENGTH_SHORT).show();
+                        }
 
+                    }else{
+                        Toast.makeText(DetalheProdutoActivity.this, "Digite a quantidade.", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 
