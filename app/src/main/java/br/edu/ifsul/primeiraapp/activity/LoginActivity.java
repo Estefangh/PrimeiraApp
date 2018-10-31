@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
 
                             AppSetup.user = mAuth.getCurrentUser();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            startActivity(new Intent(LoginActivity.this, ProdutosActivity.class));
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

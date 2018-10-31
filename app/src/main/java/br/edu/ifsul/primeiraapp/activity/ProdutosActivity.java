@@ -2,9 +2,17 @@ package br.edu.ifsul.primeiraapp.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,18 +41,34 @@ import br.edu.ifsul.primeiraapp.model.Cliente;
 import br.edu.ifsul.primeiraapp.model.Produto;
 import br.edu.ifsul.primeiraapp.setup.AppSetup;
 
-public class ProdutosActivity extends AppCompatActivity {
+public class ProdutosActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     private static final int RC_BARCODE_CAPTURE = 0;
     private static final String TAG = "produtosActivity";
     private List<Produto> produtos;
     public ListView lvProdutos;
     private static DatabaseReference myRef;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_produtos);
+        setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
 
         lvProdutos = findViewById(R.id.lvProdutos);
         lvProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -101,12 +125,19 @@ public class ProdutosActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(!AppSetup.cesta.isEmpty()){
-            alertDialogSimNao("Atenção","Se você sair os dados serão perdidos. Deseja sair mesmo assim?");
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if(!AppSetup.cesta.isEmpty()){
+                alertDialogSimNao("Atenção","Se você sair os dados serão perdidos. Deseja sair mesmo assim?");
+            }
+            else{
+                finish();
+            }
         }
-        else{
-            finish();
-        }
+
     }
 
     private void alertDialogSimNao(String titulo, String mensagem){
@@ -213,5 +244,38 @@ public class ProdutosActivity extends AppCompatActivity {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_carrinho:{
+                if (AppSetup.cesta.isEmpty()){
+                    Toast.makeText(this, "O carrinho está vazio", Toast.LENGTH_SHORT).show();
+                }else {
+                    startActivity(new Intent(this, CestaActivity.class));
+                }
+                break;
+            }
+            case R.id.nav_clientes:{
+                startActivity(new Intent(this, ClienteActivity.class));
+                break;
+            }
+            case R.id.nav_produto_adminstracao:{
+                startActivity(new Intent(this, ProdutoAdminActivity.class));
+                break;
+            }
+          /*  case R.id.nav_cliente_administracao:{
+                startActivity(new Intent(this, ClienteAdminActivity.class));
+                break;
+            }*/
+
+        }
+        // Handle navigation view item clicks here.
+
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

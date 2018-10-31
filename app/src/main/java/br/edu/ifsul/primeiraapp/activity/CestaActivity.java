@@ -76,8 +76,6 @@ public class CestaActivity extends AppCompatActivity {
         return true;
     }
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -91,7 +89,6 @@ public class CestaActivity extends AppCompatActivity {
         tvNomeVendedorCesta.setText(AppSetup.vendedor.getEmail());
 
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
