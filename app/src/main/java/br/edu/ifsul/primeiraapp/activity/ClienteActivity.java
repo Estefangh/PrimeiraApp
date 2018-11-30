@@ -48,6 +48,7 @@ public class ClienteActivity extends AppCompatActivity {
                Intent intent = new Intent(ClienteActivity.this, DetalheClienteActivity.class);
                intent.putExtra("cliente", clientes.get(position));
                startActivity(intent);
+               finish();
 
            }
        });
@@ -66,14 +67,15 @@ clientes = new ArrayList<>();
            public void onDataChange(DataSnapshot dataSnapshot) {
                // This method is called once with the initial value and again
                // whenever data at this location is updated.
-               GenericTypeIndicator<List<Cliente>> type =
-                       new GenericTypeIndicator<List<Cliente>>();
 
+               GenericTypeIndicator<List<Cliente>> type = new GenericTypeIndicator<List<Cliente>>(){};
+               Log.d(TAG, "Lista de clientes " + dataSnapshot.getValue());
                clientes = dataSnapshot.getValue(type);
                clientes.remove(null);
                //Cliente cliente = dataSnapshot.getValue(Cliente.class);
              //  Log.d(TAG, "Nome do cliente: " + clientes.getNome());
                Log.d(TAG, "Nome do cliente: " + clientes);
+               atualizarView();
            }
 
            @Override

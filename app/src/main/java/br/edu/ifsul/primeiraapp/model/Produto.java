@@ -10,6 +10,7 @@ public class Produto implements Serializable {
     private boolean situacao;
     private Integer quantidade;
     private String url_foto;
+    private String key;
 
     public Produto() {
 
@@ -71,6 +72,14 @@ public class Produto implements Serializable {
         this.url_foto = url_foto;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     @Override
     public String toString() {
         return "Produto{" +
@@ -81,6 +90,7 @@ public class Produto implements Serializable {
                 ", situacao=" + situacao +
                 ", quantidade=" + quantidade +
                 ", url_foto='" + url_foto + '\'' +
+                ", key='" + key + '\'' +
                 '}';
     }
 }

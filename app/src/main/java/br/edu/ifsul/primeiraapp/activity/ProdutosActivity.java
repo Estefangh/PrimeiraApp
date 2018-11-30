@@ -32,7 +32,10 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import br.edu.ifsul.primeiraapp.R;
 import br.edu.ifsul.primeiraapp.adapter.ProdutosAdapter;
@@ -74,50 +77,60 @@ public class ProdutosActivity extends AppCompatActivity
         lvProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //notepad.pw/detalheproduto tem essa classe
+
               Intent intent = new Intent(ProdutosActivity.this, DetalheProdutoActivity.class);
-              getIntent().putExtra("produto", produtos.get(position));
+              intent.putExtra("position", position);
               startActivity(intent);
             }
         });
-    /*    ListView lvProdutos = findViewById(R.id.lvProdutos);
-        List<Produto> produtos= new ArrayList<>();
-        Produto produto = new Produto();
-        produto.setNome("Meu produto");
-        produto.setQuantidade(100);
-        produtos.add(produto);
-        lvProdutos.setAdapter(new ProdutosAdapter(this, produtos));
-*/
+
         produtos = new ArrayList<>();
        // FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //DatabaseReference myRef = database.getReference();
+        //DatabaseReference myRef a= database.getReference();
 
-        myRef= AppSetup.getInstance();
-        // Read from the database
+        //busca a referência para o database usando Singleton
+        DatabaseReference myRef = AppSetup.getInstance();
+        // Lê do database
         myRef.child("produtos").addValueEventListener(new ValueEventListener() {
-
-            public static final String TAG ="ProdutosActivity" ;
-
-
-
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                GenericTypeIndicator<List<Produto>> type = new GenericTypeIndicator<List<Produto>>(){};
+                //um log para ver como os dados são formatados pelo Firebase
+                //Log.d(TAG, "Value is: \n" + dataSnapshot);
+                if(dataSnapshot.getValue() != null){
+                    //cria um tipo genérico do tipo Map
+                    GenericTypeIndicator<Map<String, Produto>> type = new GenericTypeIndicator<Map<String, Produto>>() {};
+                    List<String> keysProdutos = new ArrayList<>(dataSnapshot.getValue(type).keySet());
+                    //converte o Map para List e armazena a lista das chaves dos produtos no Firebase (o UUID do produto no Firebase)
+                    AppSetup.produtos = new ArrayList<>(dataSnapshot.getValue(type).values());
 
-                produtos = dataSnapshot.getValue(type);
-                produtos.remove(null);
-                Log.d(TAG, "Nome do produto: " + produtos);
-                atualizarView();
+
+                    Log.d(TAG, "Produtos no Firebase (sem ordenação): \n" + AppSetup.produtos);
+                    //insere as keys dos produtos na lista de produtos da app. Isto serve para controlar o estoque.
+                    for (int i = 0; i < AppSetup.produtos.size(); i++) {
+                        AppSetup.produtos.get(i).setKey(keysProdutos.get(i));
+                    }
+                    //ordena a List pelo nome do produto
+                    Collections.sort(AppSetup.produtos, new Comparator<Produto>() {
+                        @Override
+                        public int compare(Produto o1, Produto o2) {
+                            if (o1.getNome().compareToIgnoreCase(o2.getNome()) < 0) return -1;
+                            else if (o1.getNome().compareToIgnoreCase(o2.getNome()) > 0) return +1;
+                            else return 0;
+                        }
+                    });
+                    //Log.d(TAG, "Produtos ordenados pelo nome com a key do Firebase: \n" + AppSetup.produtos);
+                    atualizarView();
+                }else{
+                    Toast.makeText(ProdutosActivity.this, R.string.toast_nao_ha_dados_cadastrados, Toast.LENGTH_SHORT).show();
+                }
             }
 
-
-
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "erro, não deu pra ler", error.toException());
+                Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
 
@@ -163,7 +176,7 @@ public class ProdutosActivity extends AppCompatActivity
     }
 
     private void atualizarView() {
-        lvProdutos.setAdapter(new ProdutosAdapter(this, produtos));
+        lvProdutos.setAdapter(new ProdutosAdapter(this, AppSetup.produtos));
     }
 
     @Override

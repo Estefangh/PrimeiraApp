@@ -1,25 +1,42 @@
 package br.edu.ifsul.primeiraapp.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Pedido {
-    private Long totalpedido;
+    private Double totalpedido;
     private Long id_pedido;
     private String estadoPedido;
     private Date dataCriacao;
     private boolean situacaoPedido;
     private String formaPagamento;
     private Date dataModificacao;
+    private List<Item_pedido> itensPedido;
+    private Cliente cliente;
+
+    public Pedido(Double totalPedido, Long idPedido, String estadoPedido, Date dataCriacao, boolean situacaoPedido, Date dataModificacaoPedido, String formaPagamento, List<Item_pedido> itensPedido, Cliente cliente) {
+        this.totalpedido = totalPedido;
+        this.id_pedido = idPedido;
+        this.estadoPedido = estadoPedido;
+        this.dataCriacao = dataCriacao;
+        this.situacaoPedido = situacaoPedido;
+        this.dataModificacao = dataModificacaoPedido;
+        this.formaPagamento = formaPagamento;
+        this.itensPedido = itensPedido;
+        this.cliente = cliente;
+    }
+
 
     public Pedido(){
 
     } //construtor vazio
 
-    public Long getTotalpedido() {
+
+    public Double getTotalpedido() {
         return totalpedido;
     }
 
-    public void setTotalpedido(Long totalpedido) {
+    public void setTotalpedido(Double totalpedido) {
         this.totalpedido = totalpedido;
     }
 
@@ -71,6 +88,22 @@ public class Pedido {
         this.dataModificacao = dataModificacao;
     }
 
+    public List<Item_pedido> getItensPedido() {
+        return itensPedido;
+    }
+
+    public void setItensPedido(List<Item_pedido> itensPedido) {
+        this.itensPedido = itensPedido;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
     @Override
     public String toString() {
         return "Pedido{" +
@@ -81,6 +114,8 @@ public class Pedido {
                 ", situacaoPedido=" + situacaoPedido +
                 ", formaPagamento='" + formaPagamento + '\'' +
                 ", dataModificacao=" + dataModificacao +
+                ", itensPedido=" + itensPedido +
+                ", cliente=" + cliente +
                 '}';
     }
 }

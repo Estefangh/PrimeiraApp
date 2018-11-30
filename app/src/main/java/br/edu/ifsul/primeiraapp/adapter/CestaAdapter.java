@@ -46,9 +46,11 @@ public class CestaAdapter extends ArrayAdapter<Item_pedido> {
         TextView tvNomeProdutoCesta = convertView.findViewById(R.id.tvNomeProdutoCesta);
         tvNomeProdutoCesta.setText(itens.getProduto().getNome());
         TextView tvQuantidadeProdutoCesta = convertView.findViewById(R.id.tvQuantidadeProdutoCesta);
-        tvQuantidadeProdutoCesta.setText(itens.getProduto().getQuantidade());
+        tvQuantidadeProdutoCesta.setText(itens.getQuantidadePedido().toString());
         TextView tvValorTotalProduto = convertView.findViewById(R.id.tvValorTotalProduto);
         tvValorTotalProduto.setText(itens.getProduto().getValor().toString());
+
+
 
 
         if (itens.getProduto().getUrl_foto() != null){

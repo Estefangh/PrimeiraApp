@@ -9,16 +9,17 @@ import java.util.List;
 
 import br.edu.ifsul.primeiraapp.model.Cliente;
 import br.edu.ifsul.primeiraapp.model.Item_pedido;
+import br.edu.ifsul.primeiraapp.model.Produto;
 
 public class AppSetup {
     public static Cliente cliente=null;
 
 
     public static FirebaseUser vendedor = null;
-    public static FirebaseUser user = null;
+
     private static DatabaseReference myRef = null;
     public static List<Item_pedido> itensPedido=new ArrayList<>();
-
+    public static List<Produto> produtos = new ArrayList<>();
     public static List<Item_pedido> cesta = new ArrayList<>();
 
     public static DatabaseReference getInstance(){

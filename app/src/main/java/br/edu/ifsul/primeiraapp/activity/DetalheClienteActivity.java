@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import br.edu.ifsul.primeiraapp.R;
 import br.edu.ifsul.primeiraapp.model.Cliente;
+import br.edu.ifsul.primeiraapp.setup.AppSetup;
 
 public class DetalheClienteActivity extends AppCompatActivity {
 
@@ -44,9 +45,14 @@ public class DetalheClienteActivity extends AppCompatActivity {
         btAlterar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(DetalheProdutoActivity.this, "Parabéns, você clicou em alterar:" + produto.getQuantidade().toString(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(DetalheClienteActivity.this, "Parabéns, você clicou em alterar", Toast.LENGTH_SHORT).show();
-
+                if(cliente1!=null){
+                    AppSetup.cliente=cliente1;
+                    Toast.makeText(DetalheClienteActivity.this, "Cliente Selecionado", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                else{
+                    Toast.makeText(DetalheClienteActivity.this, "Não foi possível selecionar o cliente", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

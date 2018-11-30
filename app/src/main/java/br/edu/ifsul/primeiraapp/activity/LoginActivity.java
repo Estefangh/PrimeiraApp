@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithEmail:success");
                             Toast.makeText(LoginActivity.this, "Usuario logado com sucesso.", Toast.LENGTH_SHORT).show();
 
-                            AppSetup.user = mAuth.getCurrentUser();
+                            AppSetup.vendedor = mAuth.getCurrentUser();
                             startActivity(new Intent(LoginActivity.this, ProdutosActivity.class));
                             finish();
                             //updateUI(user);
@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Certíssimo, ta bombando.",
                                     Toast.LENGTH_SHORT).show();
 
-                            AppSetup.user = mAuth.getCurrentUser();
+                            AppSetup.vendedor = mAuth.getCurrentUser();
                             startActivity(new Intent(LoginActivity.this, ProdutosActivity.class));
                             //updateUI(user);
                         } else {

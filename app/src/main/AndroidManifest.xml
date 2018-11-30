@@ -32,7 +32,8 @@
             android:name=".activity.ProdutosActivity"
             android:label="Produtos"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.DetalheClienteActivity" />
+        <activity android:name=".activity.DetalheClienteActivity" android:label="Cliente"/>
+        <activity android:name=".activity.DetalheProdutoActivity" />
         <activity android:name=".activity.CestaActivity" />
         <activity android:name=".barcode.BarcodeCaptureActivity" />
         <activity android:name=".activity.ProdutoAdminActivity"></activity>
