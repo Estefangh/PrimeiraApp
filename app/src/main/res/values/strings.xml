@@ -51,4 +51,6 @@
     <string name="toast_produto_removido">Produto removido com sucesso</string>
     <string name="toast_carrinho_esta_vazio">o carrinho esta vazio</string>
     <string name="toast_nao_ha_dados_cadastrados">não tem dados cadastrados</string>
+    <string name="mensagem_se_voce_sair">saindo do aplicativo</string>
+    <string name="titulo_alertDialogSimNao">voce deseja sair mesmo</string>
 </resources>

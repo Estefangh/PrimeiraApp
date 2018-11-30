@@ -283,12 +283,27 @@ public class ProdutosActivity extends AppCompatActivity
                 break;
             }*/
 
+            case R.id.nav_sair:{
+                if (!AppSetup.cesta.isEmpty()) {
+                    alertDialogSimNao(getString(R.string.titulo_alertDialogSimNao), getString(R.string.mensagem_se_voce_sair));
+                } else {
+                    closeDrawer();
+                    finish();
+                }
+                break;
+            }
+
         }
         // Handle navigation view item clicks here.
-
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+      //  drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //drawer.closeDrawer(GravityCompat.START);
+        closeDrawer();
         return true;
+    }
+
+    private void closeDrawer() {
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+
     }
 }
